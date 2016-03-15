@@ -1,0 +1,63 @@
+
+// Bootstrap Variables
+$icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+
+// Import Bootstrap
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+
+$grad-red: linear-gradient(rgba(249,19,68,1) 0%, rgba(224,24,70,1) 59%, rgba(207,28,71,1) 100%);
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+body{
+  background-image:url("../images/concrete_seamless.png");
+  background-color: #cccccc;
+
+}
+.header{
+  position: fixed;
+  height:75px;
+  width:100%;
+  background: $grad-red;
+  top: 0px;
+  z-index: 2;
+    .add-image{
+      background-color: rgba(255,255,255,0);
+      border-radius: 45px;
+      width:45px;
+    }
+    div:first-child{
+      margin-top: 15px;
+      margin-left: 20px;
+      font-size: 1.7em;
+    }
+    span{
+      position: relative;
+      right:3px;
+    }
+}
+#display-wrapper{
+  background:rgba(0,0,0,0.2);
+  height:900px;
+
+}
+form{
+  input{
+    display:block;
+    width:90%;
+  }
+}
+.form-wrapper{
+  margin-right: 50px;
+}
+
+.hidden{
+  display: none;
+}
