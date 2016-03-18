@@ -6,29 +6,34 @@ var ReactDOM = require('react-dom');
 var Backbone = require('backbone');
 require('backbone-react-component');
 
+$.fn.serializeObject = function() {
+  return this.serializeArray().reduce(function(acum, i) {
+    acum[i.name] = i.value;
+    return acum;
+  }, {});
+};
+
 
 var SubmitalForm = React.createClass({displayName: "SubmitalForm",
 
+  addImage: function(e){
+    e.preventDefault();
+    this.props.collection.add($(e.target).serializeObject());
+    return this;
 
-addImage: function(e){
-  e.preventDefault();
-this.props.Collection.add($('.imageSubmit').value);
-  console.log($('.imageSubmit').value)
-  return this;
-
-},
-render: function(){
-  return(
-    React.createElement("form", {className: "imageSubmit row", onSubmit: this.addImage}, 
-    React.createElement("div", {className: "form-group col-md-12"}, 
-      React.createElement("input", {type: "text", name: "imageURL", className: "form-control"}), 
-      React.createElement("input", {type: "text", name: "caption", className: "form-control"}), 
-      React.createElement("button", {className: "btn btn-default", type: "submit"}, "Submit"), 
-      React.createElement("button", {className: "btn btn-default", id: "close", type: "button", onClick: function(){$('#form-wrapper').addClass('hidden')}}, "Close")
-        )
-    )
-    )
-  }
+  },
+  render: function(){
+    return(
+      React.createElement("form", {className: "imageSubmit row", onSubmit: this.addImage}, 
+      React.createElement("div", {className: "form-group col-md-12"}, 
+        React.createElement("input", {type: "text", name: "imageUrl", className: "form-control"}), 
+        React.createElement("input", {type: "text", name: "caption", className: "form-control"}), 
+        React.createElement("button", {className: "btn btn-default", type: "submit"}, "Submit"), 
+        React.createElement("button", {className: "btn btn-default", id: "close", type: "button", onClick: function(){$('#form-wrapper').addClass('hidden')}}, "Close")
+          )
+      )
+      )
+    }
 });
 
 module.exports = SubmitalForm;
@@ -39,20 +44,27 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Backbone = require('backbone');
 require('backbone-react-component');
-
+var _ = require('underscore')
 
 var PostListing = React.createClass({displayName: "PostListing",
-
+mixins: [Backbone.React.Component.mixin],
 render: function(){
+
+  var allPosts = this.props.collection.map(function(model){
+    return (
+      React.createElement("div", {key: model.get('imageUrl')}, 
+        React.createElement("img", {src: model.get('imageUrl')}), 
+        React.createElement("p", null, 
+          model.get('caption')
+        )
+      )
+      )
+  });
+
   return(
   React.createElement("div", {className: "row"}, 
     React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
-    React.createElement("img", {src: "https://images.unsplash.com/photo-1453282716202-de94e528067c?crop=entropy&dpr=2&fit=crop&fm=jpg&h=625&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=1200"})
-    ), 
-    React.createElement("div", {className: "col-md-10 col-md-offset-1 caption-container"}, 
-      React.createElement("p", null, 
-        "\"This is the caption for this Photo\""
-      )
+    allPosts
     )
   )
     )
@@ -61,7 +73,7 @@ render: function(){
 
 module.exports = PostListing;
 
-},{"backbone":6,"backbone-react-component":5,"react":165,"react-dom":36}],3:[function(require,module,exports){
+},{"backbone":6,"backbone-react-component":5,"react":165,"react-dom":36,"underscore":166}],3:[function(require,module,exports){
 "use strict";
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -74,23 +86,21 @@ var Models = require('./models/image.js');
 var SubmitalForm = require('./components/form.jsx');
 var PostListing = require('./components/listing.jsx');
 
-
-var imageCollection = new Models.ImageCollection();
-
 $('.add-image').click(function(){
 $('#form-wrapper').removeClass('hidden');
 });
 
-
+var imageCollection = new Models.ImageCollection();
+imageCollection.fetch();
 
 
 
 ReactDOM.render(
-  React.createElement(SubmitalForm, {Collection: imageCollection}),
+  React.createElement(SubmitalForm, {collection: imageCollection}),
   document.getElementById('form-wrapper')
 );
 ReactDOM.render(
-  React.createElement(PostListing, {Collection: imageCollection}),
+  React.createElement(PostListing, {collection: imageCollection}),
   document.getElementById('display-wrapper')
 );
 
@@ -102,7 +112,7 @@ var Backbone = require('backbone');
 
 var Post = Backbone.Model.extend({
   defaults:{
-    'image-url':'https://images.unsplash.com/photo-1456428199391-a3b1cb5e93ab?crop=entropy&dpr=2&fit=crop&fm=jpg&h=575&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=925',
+    'imageUrl':'https://images.unsplash.com/photo-1456428199391-a3b1cb5e93ab?crop=entropy&dpr=2&fit=crop&fm=jpg&h=575&ixjsv=2.1.0&ixlib=rb-0.3.5&q=50&w=925',
     'caption' :'Crescent City, CA'
   }
 });
@@ -116,7 +126,7 @@ urlRoot: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14/'
 
 var ImageCollection = Backbone.Collection.extend({
 
-  model:Post,
+  model: Post,
   url: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14'
 
 });

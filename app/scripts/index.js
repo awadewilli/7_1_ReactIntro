@@ -9,22 +9,20 @@ var Models = require('./models/image.js');
 var SubmitalForm = require('./components/form.jsx');
 var PostListing = require('./components/listing.jsx');
 
-
-var imageCollection = new Models.ImageCollection();
-
 $('.add-image').click(function(){
 $('#form-wrapper').removeClass('hidden');
 });
 
-
+var imageCollection = new Models.ImageCollection();
+imageCollection.fetch();
 
 
 
 ReactDOM.render(
-  <SubmitalForm Collection={imageCollection}/>,
+  <SubmitalForm collection={imageCollection}/>,
   document.getElementById('form-wrapper')
 );
 ReactDOM.render(
-  <PostListing Collection={imageCollection}/>,
+  <PostListing collection={imageCollection}/>,
   document.getElementById('display-wrapper')
 );
