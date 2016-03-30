@@ -17,12 +17,11 @@ var imageCollection = new Models.ImageCollection();
 imageCollection.fetch();
 
 
-
 ReactDOM.render(
-  <SubmitalForm collection={imageCollection}/>,
+  React.createElement(SubmitalForm,{collection:imageCollection}),
   document.getElementById('form-wrapper')
 );
 ReactDOM.render(
-  <PostListing collection={imageCollection}/>,
+  React.createElement(PostListing,{collection:imageCollection}),
   document.getElementById('display-wrapper')
 );

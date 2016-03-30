@@ -18,17 +18,18 @@ var SubmitalForm = React.createClass({displayName: "SubmitalForm",
 
   addImage: function(e){
     e.preventDefault();
-    this.props.collection.add($(e.target).serializeObject());
+    this.props.collection.create($(e.target).serializeObject());
     return this;
 
   },
   render: function(){
+
     return(
       React.createElement("form", {className: "imageSubmit row", onSubmit: this.addImage}, 
       React.createElement("div", {className: "form-group col-md-12"}, 
         React.createElement("input", {type: "text", name: "imageUrl", className: "form-control"}), 
         React.createElement("input", {type: "text", name: "caption", className: "form-control"}), 
-        React.createElement("button", {className: "btn btn-default", type: "submit"}, "Submit"), 
+        React.createElement("button", {className: "btn btn-default", type: "submit"}, "'Submit'"), 
         React.createElement("button", {className: "btn btn-default", id: "close", type: "button", onClick: function(){$('#form-wrapper').addClass('hidden')}}, "Close")
           )
       )
@@ -45,14 +46,16 @@ var ReactDOM = require('react-dom');
 var Backbone = require('backbone');
 require('backbone-react-component');
 var _ = require('underscore');
+require('backbone-react-component');
 
 var PostListing = React.createClass({displayName: "PostListing",
+mixins: [Backbone.React.Component.mixin],
 
 render: function(){
-
   var allPosts = this.props.collection.map(function(model){
+    console.log(model);
     return (
-      React.createElement("div", {key: model.get('imageUrl')}, 
+      React.createElement("div", {key: model.get('_id')}, 
         React.createElement("img", {src: model.get('imageUrl')}), 
         React.createElement("p", null, 
           model.get('caption')
@@ -60,7 +63,7 @@ render: function(){
       )
       )
   });
-
+  console.log(allPosts);
   return(
   React.createElement("div", {className: "row"}, 
     React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
@@ -94,13 +97,12 @@ var imageCollection = new Models.ImageCollection();
 imageCollection.fetch();
 
 
-
 ReactDOM.render(
-  React.createElement(SubmitalForm, {collection: imageCollection}),
+  React.createElement(SubmitalForm,{collection:imageCollection}),
   document.getElementById('form-wrapper')
 );
 ReactDOM.render(
-  React.createElement(PostListing, {collection: imageCollection}),
+  React.createElement(PostListing,{collection:imageCollection}),
   document.getElementById('display-wrapper')
 );
 
@@ -119,7 +121,6 @@ var Post = Backbone.Model.extend({
 
 var FormModel = Backbone.Model.extend({
 
-urlRoot: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14/'
 
 });
 
@@ -127,7 +128,7 @@ urlRoot: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14/'
 var ImageCollection = Backbone.Collection.extend({
 
   model: Post,
-  url: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14'
+  url: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_4'
 
 });
 

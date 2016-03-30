@@ -11,7 +11,6 @@ var Post = Backbone.Model.extend({
 
 var FormModel = Backbone.Model.extend({
 
-urlRoot: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14/'
 
 });
 
@@ -19,7 +18,7 @@ urlRoot: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14/'
 var ImageCollection = Backbone.Collection.extend({
 
   model: Post,
-  url: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_3_14'
+  url: 'http://tiny-lasagna-server.herokuapp.com/collections/awadewilli_4'
 
 });
 
